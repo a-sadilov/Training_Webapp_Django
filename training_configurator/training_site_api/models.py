@@ -1,7 +1,8 @@
 from django.db import models
 from datetime import datetime
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.urls import reverse
+from accounts.models import User
 
 
 class UserSettings(models.Model):
@@ -16,6 +17,30 @@ class UserSettings(models.Model):
     sets_pause = models.PositiveSmallIntegerField("Отдых между подходами", default=90)
     repeat_pause = models.PositiveSmallIntegerField("Отдых между упражнениями", default=150)
     rest_duration_step = models.PositiveSmallIntegerField("Шаг длительности", default=1)
+
+    @property
+    def get_weigth_step(self):
+        return self.weigth_step
+
+    @property
+    def get_repeat_step(self):
+        return self.repeat_step
+        
+    @property
+    def get_cardio_duration_step(self):
+        return self.cardio_duration_step
+    
+    @property
+    def get_sets_pause(self):
+        return self.sets_pause
+    
+    @property
+    def get_repeat_pause(self):
+        return self.repeat_pause
+        
+    @property
+    def get_rest_duration_step(self):
+        return self.rest_duration_step
 
     class Meta:
         verbose_name = "Настройки шага измерений упражнения"
@@ -109,14 +134,34 @@ class TrainingTask(models.Model):
     
     """def get_kkal(self):
         return self.kkal_quantity"""
-  
+
+    @property
+    def get_task_type(self):
+        return self.task_type
+
+    @property
+    def get_task_musclegroup(self):
+        return self.musclegroup_type
+    
+    @property
+    def get_reps_quantity(self):
+        return self.musclegroup_type
+
+    @property
+    def get_distance(self):
+        return self.distance
+
+    @property
+    def get_weigth(self):
+        return self.weigth
+
     class Meta:
         ordering = ['name']
         verbose_name = "Упражнение"
         verbose_name_plural = "Упражнения"
 
 
-class Day(models.Model):
+'''class Day(models.Model):
     """День"""
 
     """def get_daily_kkal(self):
@@ -140,10 +185,10 @@ class Day(models.Model):
 
     class Meta:
         verbose_name = "День недели"
-        verbose_name_plural = "Дни недели"
+        verbose_name_plural = "Дни недели"'''
 
 
-class Training(models.Model):
+'''class Training(models.Model):
     """Тренировка"""
     """def get_kkal(self):
         for task in self.tasks:
@@ -165,4 +210,4 @@ class Training(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name = "Тренировка"
-        verbose_name_plural = "Тренировки"
+        verbose_name_plural = "Тренировки"'''

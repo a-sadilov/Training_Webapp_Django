@@ -1,5 +1,6 @@
 from rest_framework import  serializers
-from .models import  UserMeasurements, UserSettings, Person, Training, TrainingTask, Day
+from .models import  UserMeasurements, UserSettings, Person, TrainingTask
+from calendarapp.models import Event
 
 class UserSettingsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,15 +28,9 @@ class TrainingTaskSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Day
-        fields = "__all__"
-
-class TrainingSerializer(serializers.ModelSerializer):
-    training_date = DaySerializer(many=True)
+class EventSerializer(serializers.ModelSerializer):
     tasks = TrainingTaskSerializer(many=True)
     class Meta:
-        model = Training
+        model = Event
         fields = "__all__"
     
