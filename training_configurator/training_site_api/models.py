@@ -1,7 +1,7 @@
 from django.db import models
-from datetime import datetime
+#from datetime import datetime
 #from django.contrib.auth.models import User
-from django.urls import reverse
+#from django.urls import reverse
 from accounts.models import User
 
 
@@ -119,7 +119,7 @@ class TrainingTask(models.Model):
     distance = models.PositiveSmallIntegerField("Дистанция", blank=True, null=True)
     weigth = models.PositiveSmallIntegerField("Поднимаемый вес", blank=True, null=True, default=0)
     reps_quantity = models.PositiveSmallIntegerField("Количество повторений", blank=True, default=1)
-    task_settings = models.OneToOneField(UserSettings, null=True, on_delete=models.PROTECT)
+    task_settings = models.ForeignKey(UserSettings, null=True, on_delete=models.PROTECT)
 
     #parent = models.ForeignKey('self', verbose_name="Родитель", on_delete=models.SET_NULL, blank=True, null=True, related_name="children")
     #distance = models.PositiveSmallIntegerField("Дистанция", blank=True, null=True)

@@ -9,6 +9,5 @@ urlpatterns = [
     path("", include("calendarapp.urls")),
     path("accounts/", include("accounts.urls")),
     path("", include("training_site_api.urls")),
-    path("api-auth/", include("rest_framework.urls")),
     path("admin/", admin.site.urls),
 ]
