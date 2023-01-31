@@ -8,15 +8,20 @@ const routes = [
       // webpackChunkName: "about" 
        '../views/Calendar.vue')
   },*/
-  /*{
-      path: '/training/:id',
-    name: 'training-detail',
-    component: () => import( '../views/TrainingDetail.vue')
-  },*/
   {
-      path: '/training-task/:id',
-    name: 'training-task-detail',
-    component: () => import( '../views/TrainingTaskDetail.vue')
+    path: '/dashboard',
+    name: 'dashboard-view',
+    component: () => import( '../views/DashboardView.vue')
+  },
+  {
+    path: '/event/:id',
+    name: 'event-detail',
+    component: () => import( '../views/EventDetail.vue')
+  },
+  {
+      path: '/task/:id',
+    name: 'task-detail',
+    component: () => import( '../views/TaskDetail.vue')
   },
   /*{
       path: '/training-form',

@@ -1,9 +1,23 @@
+from rest_framework import filters, viewsets
+from rest_framework import permissions
+from rest_framework import pagination
+from rest_framework.response import  Response
 from .models import  Person, TrainingTask, UserSettings, UserMeasurements
 from calendarapp.models import Event
 from .serializers import *
-from rest_framework import filters, viewsets
-from rest_framework import permissions
 
+
+class CustomPagination(pagination.PageNumberPagination):
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'count': self.page.paginator.count,
+            'total_pages': self.page.paginator.num_pages,
+            'results': data
+        })
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -12,6 +26,7 @@ class EventViewSet(viewsets.ModelViewSet):
     search_fields = ('title', 'description')
     permission_classes = [permissions.DjangoModelPermissions]
     http_method_names = ['get', 'post', 'head', 'delete', 'update']
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -32,7 +47,8 @@ class UserSettingsViewSet(viewsets.ModelViewSet):
     serializer_class = UserSettingsSerializer
     permission_classes = [permissions.DjangoModelPermissions]
     http_method_names = ['get', 'head', 'update']
-
+    
+    
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(user = self.request.user)
@@ -57,6 +73,7 @@ class UserMeasurementsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.DjangoModelPermissions]
     search_fields = ('name')
     http_method_names = ['get', 'post', 'head', 'delete', 'update']
+    pagination_class = CustomPagination
     
     def get_queryset(self):
         queryset = super().get_queryset()

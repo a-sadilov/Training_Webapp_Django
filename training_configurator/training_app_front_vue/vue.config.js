@@ -24,18 +24,23 @@ module.exports = defineConfig({
     "devServer": {
         "proxy": {
             "^/api": {
-                "target": "http://localhost:8000",
+                "target": "http://127.0.0.1:8000/",
                 "ws": true,
                 "changeOrigin": true
             },
             "^/admin": {
-                "target": "http://localhost:8000",
+                "target": "http://127.0.0.1:8000/",
                 "ws": true,
                 "changeOrigin": true
             },
 
             "^/accounts": {
-                "target": "http://localhost:8000",
+                "target": "http://127.0.0.1:8000/",
+                "ws": true,
+                "changeOrigin": true
+            },
+            "^/calender": {
+                "target": "http://127.0.0.1:8000/calender/",
                 "ws": true,
                 "changeOrigin": true
             },

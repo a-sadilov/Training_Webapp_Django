@@ -1,44 +1,65 @@
 <template>
-    <div>
+    <div class="container">
         <h2> Доска событий </h2> 
         <div class="row">
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small primary coloured-icon">
-                <i class="icon fa fa-files-o fa-3x"></i>
-                <div class="info">
-                    <h4> Total Completed Events</h4>
-                    <p><b>{{ total_event }}</b></p>
+            <div class="col-md-6 col-lg-3">
+                <div class="widget-small primary coloured-icon">
+                    <i class="icon fa fa-files-o fa-3x"></i>
+                    <div class="info">
+                        <h4> Total Completed Events</h4>
+                        <p><b> 5 </b></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="widget-small info coloured-icon">
+                    <i class="icon fa fa-thumbs-o-up fa-3x"></i>
+                    <div class="info">
+                        <h4> Total Running Events </h4>
+                        <p><b> 3 </b></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="widget-small warning coloured-icon">
+                    <i class="icon fa fa-users fa-3x"></i>
+                    <div class="info">
+                        <h4> Total Participants</h4>
+                        <p><b> 10 </b></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="widget-small danger coloured-icon">
+                    <i class="icon fa fa-star fa-3x"></i>
+                    <div class="info">
+                        <h4> Stars </h4>
+                        <p><b> 500 </b></p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small info coloured-icon">
-                <i class="icon fa fa-thumbs-o-up fa-3x"></i>
-                <div class="info">
-                    <h4> Total Running Events </h4>
-                    <p><b>{{ running_events.count }}</b></p>
+        <div class="row">
+            <div class="col-2">
+                <h2> Фильтры</h2>
+                <div>
+                Название
                 </div>
+                <event-select v-model="filters.event"/>
+
+                <div>
+                Название
+                </div>
+                <input v-model="filters.name__icontains" class="form-control"/>
+
+                <div>
+                Упражнения
+                </div>
+                <task-select v-model="filters.task"/>
+
             </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small warning coloured-icon">
-                <i class="icon fa fa-users fa-3x"></i>
-                <div class="info">
-                    <h4> Total Participants</h4>
-                    <p><b> 10 </b></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="widget-small danger coloured-icon">
-                <i class="icon fa fa-star fa-3x"></i>
-                <div class="info">
-                    <h4> Stars </h4>
-                    <p><b> 500 </b></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
+        <div class="col-10">
             <div class="tile">
                 <div class="tile-body">
                     <div class="table-responsive">
@@ -60,12 +81,12 @@
                                                 <td>{{event.id}}</td>
                                                 <td>{{event.name}}</td>
                                                 <td>
-                                                    <div v-for="task in event.tasks" :key="event.id">{{task}}</div>
+                                                    <div v-for="task in event.tasks" :key="task.name">{{task.name}}</div>
                                                 </td>
                                                 <td> {{event.start_time}}</td>
                                                 <td> {{event.end_time}}</td>
                                                 <td @click.stop="toTask(event.tasks)">{{art.tasks? art.tasks.name:''}}</td>
-                                                <td> <button @click="deleteEvent(event,idx)"> удалить  </button></td>
+                                                <td> <button @click="deleteEvent(event,idx)"> Удалить  </button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -76,16 +97,21 @@
                 </div>
             </div>
         </div>
-
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item" :class="activePage==x? 'active':''" v-for="x in maxPage" :key="x" @click="selectPage(x)"><a class="page-link" href="#">{{x}}</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
     </div>
-</div>
 
 </template>
 <script>
 
 //import axios from 'axios'
-import SelectAuthor from "@/components/SelectAuthor"
-import JournalSelect  from "@/components/JournalSelect"
+import EventSelect from "@/components/EventSelect"
+import TaskSelect  from "@/components/TaskSelect"
 import {Event} from "@/api.js"
 export default{
     name:'dashboard-view',
@@ -93,7 +119,7 @@ export default{
         return {
             filters:{},
             searchFiedl:'',
-            selectAuthor:{},
+            EventSelect:{},
             maxPage:1,
             activePage:1,
             eventsList:[
@@ -101,27 +127,27 @@ export default{
         }
     },
     components:{
-        SelectAuthor,
-        JournalSelect,
+        EventSelect,
+        TaskSelect,
     },
     watch:{
         searchFiedl(){
-            this.getArticle()
+            this.getEvent()
         },
         filters:{
             deep:true,
             handler(){
-                this.getArticle()
+                this.getEvent()
             },
         },
     },
     mounted(){
-        this.getArticle()
+        this.getEvent()
     },
     methods:{
         selectPage(p){
             this.activePage=p
-            this.getArticle()
+            this.getEvent()
         },
         toTask(task){
             this.$router.push({name:'task-detail',params:{id:task.id}})
@@ -139,7 +165,7 @@ export default{
         updateAutho(event){
             this.filters['author']=event.id
         },
-        async getArticle(){
+        async getEvent(){
             //let params = {
             //    author__name__icontains:this.searchFiedl,
             //    author:this.selectAuthor.id

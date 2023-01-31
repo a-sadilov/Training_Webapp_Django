@@ -1,5 +1,5 @@
 <template> 
-    <v-select @search="getTraining" :options="trainingsList"
+    <v-select @search="getTask" :options="tasksList"
     label="name" @update:modelValue="$emit('update:modelValue',$event)"/>
 </template>
 <script>
@@ -13,18 +13,18 @@ export default{
     },
     data(){
         return {
-            trainingName:'',
-            trainingsList:[],
+            taskName:'',
+            tasksList:[],
         }
     },
     mounted(){
-        this.getTraining()
+        this.getTask()
     },
     methods:{
-        async getTraining(search){
+        async getTask(search){
             let   params={name__icontains:search}
-            let data =  (await axios.get('/api/training/',{params})).data
-            this.trainingsList = data.results
+            let data =  (await axios.get('/api/task/',{params})).data
+            this.tasksList = data.results
         },
     }
 }
